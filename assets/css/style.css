@@ -1,0 +1,90 @@
+#playArea {
+    height: 500px;
+    width: 65%;
+    float: left;
+    background-image: url(../images/background.png);
+    background-repeat: no-repeat;
+    margin-top: 40px;
+}
+#info {
+    width: 33%;
+    float: left;
+    margin-right: 20px;
+}
+
+#playerSelect {
+    height: 60px;
+}
+
+#playerSelect .player{
+    margin-left: 40%;
+}
+
+#currentPlayer {
+    height: 100px;
+
+} 
+
+#enemies {
+    height: 100px;
+
+}
+
+#currentDefender {
+    height: 100px;
+
+}
+
+#attackInfo {
+    height: 30px;
+
+}
+
+#playerSelect {
+    height: 70px;
+    text-align: center;
+
+}
+
+#playerSelect div {
+    width: 20%;
+    height: 80px;
+    float: left;
+    margin-right: 12px;
+    margin-left: 12px;
+}
+
+#playerSelect img:hover {
+   cursor: pointer;
+}
+
+#enemies {
+    text-align: center;
+}
+
+#enemies div{
+    width: 25%;
+    height: 80px;
+    float: left;
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+#enemies img:hover {
+    cursor: pointer;
+}
+
+
+img {
+    width: 60px;
+    height: 80px;
+    margin-top: 20px;
+}
+
+p {
+    text-align: center;
+}
+
+#buttons {
+    text-align: center;
+}
