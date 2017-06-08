@@ -1,49 +1,72 @@
+/* ALL */
+body {
+    background-image: url(/assets/images/cloud.jpg);
+    background-repeat: no-repeat;
+    font-family: 'Mogra', cursive;
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    font-size: 60px;
+    text-align: center;
+}
+
+h3 {
+    font-family: 'Mogra', cursive;
+    color: white;
+    text-align: center;
+}
+
+p {
+    font-family: 'Mogra', cursive;
+    color: white;
+    text-align: center;
+}
+
+img {
+    width: 60px;
+    height: 80px;
+    margin-top: 20px;
+}
+
+
+/* PLAY AREA */
 #playArea {
     height: 500px;
     width: 65%;
     float: left;
     background-image: url(../images/background.png);
     background-repeat: no-repeat;
-    margin-top: 40px;
+    margin-top: 10px;
 }
+
+
+/* INFO */
+
 #info {
     width: 33%;
     float: left;
     margin-right: 20px;
+    
 }
 
-#playerSelect {
-    height: 60px;
-}
-
-#playerSelect .player{
-    margin-left: 40%;
-}
-
-#currentPlayer {
-    height: 100px;
-
-} 
-
-#enemies {
-    height: 100px;
-
-}
-
-#currentDefender {
-    height: 100px;
-
-}
-
-#attackInfo {
-    height: 30px;
-
-}
-
-#playerSelect {
-    height: 70px;
+/* PLAYER */
+#playerContainer {
+    height 200px;
+    width: 34.4%;
+  /*  background-image: url(/assets/images/stone.jpg);
+    background-repeat: no-repeat;*/
+    position: absolute;
+    top: 105px;
     text-align: center;
+}
 
+#playerSelect {
+    height: 150px;
+    text-align: center;
+    border: double 8px #c4c4c4;
+    position: relative;
 }
 
 #playerSelect div {
@@ -58,9 +81,17 @@
    cursor: pointer;
 }
 
-#enemies {
-    text-align: center;
+#playerSelect .player{
+    margin-left: 40%;
 }
+
+#playerHP {
+    position: relative;
+    right: 125px;
+}
+
+
+/* ENEMY */
 
 #enemies div{
     width: 25%;
@@ -74,17 +105,68 @@
     cursor: pointer;
 }
 
-
-img {
-    width: 60px;
-    height: 80px;
-    margin-top: 20px;
+#enemyContainer{ 
+    width: 34.4%;
+    height: 200px;
+    position: absolute;
+    top: 360px;
+    /*background-image: url(/assets/images/stone.jpg);
+    background-repeat: no-repeat;*/
 }
 
-p {
+#enemies {
+    height: 140px;
+    text-align: center;
+    border: double 8px #c4c4c4;
+    position: relative;
+}
+.enemies {
     text-align: center;
 }
+
+#enemyHP {
+    position: absolute;
+    left: 315px;
+    top: 0;
+    text-align: center;
+
+}
+
+/* BUTTONS CONTAINER */
 
 #buttons {
-    text-align: center;
+    width: 34.4%;
+    position: absolute;
+    text-align: left;
+    top: 330px;
+    color: black;
+}
+
+#Attack{
+    position: relative;
+    right: 76%;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+#restart {
+    position: relative;
+    left: 1%;
+}
+
+
+/* ATTACK INFO */
+
+#attackInfo {
+    height: 30px;
+}
+
+.attackInfo {
+    width: 250px;
+    height: 60px;
+    margin-left: 155px;
+    float: left;
+    position: relative;
 }

@@ -1,37 +1,39 @@
-var playerSelect = $("#playerSelect");
-var currentPlayer = $("#currentPlayer");
-var enemies = $("#enemies");
-var defender = $("#currentDefender");
-var attackInfo = $("#attackInfo");
-var attackButton = $("#attack");
-var restartButton = $("#restart");
-
-var characters = [["Scorpion", 150, 20, "assets/images/Scorpion.png"], ["Sheeva", 150, 25, "assets/images/Sheeva.png"], ["Sonya", 150, 15, "assets/images/Sonya.png"], ["Sub Zero", 150, 35, "assets/images/SubZero.png"]];
+var characters = [["SCORPION", 150, 7, "assets/images/Scorpion.png"], ["SHEEVA", 150, 8, "assets/images/Sheeva.png"], ["SONYA", 150, 9, "assets/images/Sonya.png"], ["SUB ZERO", 150, 10, "assets/images/SubZero.png"]];
 
 var player = [];
 
 var enemy = [];
 
-
 var attack;
-
+var playerId;
+var playerNum;
+var enemyId;
+var enemyNum;
+var myDiv;
+var image;
+var paragraph;
 
 /******************* FUNCTIONS **********************/
 
+function restart() {
+    location.reload();
+}
+
+function attacking() {
+    
+}
 
 //Function takes these characters and displays their images on screen.
-function displayCharacters(location , arr) {
+function displayCharacters(location , arr, className) {
     $(".characters").remove();
-    var myDiv;
-    var image;
-    var paragraph;
+    $(".enemies").remove();
     
     for (var i = 0; i < characters.length; i++) {
         myDiv = $("<div>");
         image = $("<img>");
         paragraph = $("<p>");
         myDiv.attr("id", "character"+i);
-        myDiv.addClass("characters");
+        myDiv.addClass(className);
 
         image.attr("src", arr[i][3]);
         paragraph.text(arr[i][0]);
@@ -42,28 +44,78 @@ function displayCharacters(location , arr) {
     }
 }
 
+function displayPlayer() {
+    myDiv = $("<div>");
+    image = $("<img>");
+    paragraph = $("<p>");
+    myDiv.attr("id", playerId);
+    myDiv.addClass("player");
+    
+    image.attr("src", player[0][3]);
+    paragraph.text(player[0][0]);
+    
+    myDiv.append(image);
+    myDiv.append(paragraph);
+    $("#playerSelect").append(myDiv); 
+}
 
+function displayDefender() {
+    myDiv = $("<div>");
+    image = $("<img>");
+    paragraph = $("<p>");
+    myDiv.attr("id", enemyId);
+    myDiv.addClass("defender");
+    
+    image.attr("src", enemy[0][3]);
+    paragraph.text(enemy[0][0]);
+    
+    myDiv.append(image);
+    myDiv.append(paragraph);
+    $("#playerSelect").append(myDiv);
+    
+    $(".player").css("margin-left", "70px");
+    
+    $("#playerContainer h3").html("VS");
+    $("#playerContainer h3").css({"position": "relative", "top": "55px"});
+    $("#playerContainer").css("height", "150px");
+    $("#playerSelect").css("top", "-55px");
+    $(".enemies").css("margin-left", "70px");
+    $("#enemyContainer").css("top", "290px");
+    $("#buttons").css("top", "270px");
+    $("#buttons #Attack").toggleClass("invisible");
+    $(".attackInfo").css("top", "0px");
+    
+    enemyHP();
+}
 
+function playerHP() {
+    myDiv = $("<div>");
+    paragraph = $("<p>");
+    paragraph.text("HP " + player[0][1]);
+    myDiv.append(paragraph);
+    myDiv.attr("id", "playerHP");
+    $("#playerSelect").append(myDiv);
+}
 
-    //remove other players to defender array
-    //change playerSelect h3 text to Player
-    //change style to make player in center
-
-// Moves other characters to the enemies div
-//displays players stats: Life and current attack
-//displays defenders stats: Life and current attack
-
-// Function for onclick choosing current defender moves character from enemies div to defender div
-
+function enemyHP() {
+    var location = $("#"+ enemyId);
+    myDiv = $("<div>");
+    paragraph = $("<p>");
+    paragraph.text("HP " + enemy[0][1]);
+    myDiv.append(paragraph);
+    myDiv.attr("id", "enemyHP");
+    location.append(myDiv);
+}
+   
 
 
 $(document).ready(function(){
 
-    displayCharacters("#playerSelect", characters);
+    displayCharacters("#playerSelect", characters, "characters");
 //Function for onclick selecting players character moving character to player div
 $(".characters").on("click", function(){
-    var playerId = ($(this).attr("id"));
-    var playerNum = parseInt(playerId[9]);
+    playerId = ($(this).attr("id"));
+    playerNum = parseInt(playerId[9]);
     console.log(playerId + " " + playerNum);
     player.push(characters[playerNum]);
     console.log(player);
@@ -72,20 +124,29 @@ $(".characters").on("click", function(){
     
     //displayCharacters("#playerSelect", player);
     
-    displayCharacters("#enemies", characters);
+    displayCharacters("#enemies", characters, "enemies");
     
-    myDiv = $("<div>");
-    image = $("<img>");
-    myDiv.attr("id", playerId);
-    myDiv.addClass("player");
-    image.attr("src", player[0][3]);
-    myDiv.append(image);
-    $("#playerSelect").append(myDiv);
+    displayPlayer();
+    playerHP();
+    $("#playerContainer h3").html("Player");    
     
-    $("#playerSelect h3").html("Player");
-    
-    
+    $(".enemies").on("click", function(){
+        enemyId = ($(this).attr("id"));
+        enemyNum = parseInt(enemyId[9]);
+        console.log(enemyId + " " + enemyNum); 
+        enemy.push(characters[enemyNum]);
+        console.log(enemy);
+        characters.splice(enemyNum, 1);
+        console.log(characters);
+        
+        displayCharacters("#enemies", characters, "enemies");
+        
+        displayDefender();
+    });
     
 });
+    
+    
+    
     
 });

@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Mortal Kombat</title>
+    
+    <link href="https://fonts.googleapis.com/css?family=Mogra" rel="stylesheet">
 
     <!-- Added link to the jQuery Library -->
     <script src="https://code.jquery.com/jquery-3.1.1.js"></script>
@@ -16,39 +18,48 @@
 
 </head>
 <body>
+
+    <h1>MORTAL KOMBAT</h1>
+    
     
     <div id="container">
        
         <div id="info">
-            <div id="playerSelect">
-                <h3>Select a player</h3>
+            <div id="playerContainer">
+                <h3>CHOOSE YOUR FIGHTER</h3>
+                <div id="playerSelect">
+                    
+                </div>
             </div>
-
             <div id="currentPlayer">
 
 
             </div>
-
-            <div id="enemies">
-
+            <div id="enemyContainer">
                 <h3>Select an enemy</h3>
-                
+                <div id="enemies">
+
+                    
+
+                </div>
             </div>
 
-            <div id="currentDefender">
-
-            </div>
             <div id="attackInfo">
 
             </div>
 
             <div id="buttons">
-                <button id="attack">Attack</button> 
-                <button id="restart">Restart</button>
+                <button id="Attack" class="invisible" onclick="attacking()">Attack</button>
+                
+                <div class="attackInfo"></div>
+            
+                <button id="restart" onclick="restart()">Restart</button>
             </div>
         </div>
 
-            <div id="playArea"></div>
+            <div id="playArea">
+                <div ></div>
+            </div>
         </div>    
 
 </body>
