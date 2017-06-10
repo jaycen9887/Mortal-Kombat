@@ -1,4 +1,4 @@
-var characters = [["SCORPION", 150, 7, "assets/images/Scorpion.png"], ["SHEEVA", 150, 8, "assets/images/Sheeva.png"], ["SONYA", 150, 9, "assets/images/Sonya.png"], ["SUB ZERO", 150, 10, "assets/images/SubZero.png"]];
+var characters = [["SCORPION", 120, 8, "assets/images/Scorpion.png"], ["SHEEVA", 100, 5, "assets/images/Sheeva.png"], ["SONYA", 150, 20, "assets/images/Sonya.png"], ["SUB ZERO", 180, 25, "assets/images/SubZero.png"]];
 
 var player = [];
 
@@ -13,13 +13,82 @@ var myDiv;
 var image;
 var paragraph;
 
+
+var playerHealth;
+var playerAttack;
+var playerUpAttack;
+    
+var enemyHealth;    
+var enemyAttack;
+
 /******************* FUNCTIONS **********************/
 
 function restart() {
     location.reload();
 }
 
-function attacking() {
+function attacking() {    
+    playerHealth -= enemyAttack;
+    enemyHealth -= playerAttack;
+    playerAttack += player[0][2];
+    
+    $("#playerStats").html(player[0][0] + " <br/>" + "Health: " + playerHealth + " <br/>" + "Attack: " + playerAttack);
+    $("#enemyStats").html(enemy[0][0] + " <br/>" + "Health: " + enemyHealth + " <br/>" + "Attack: " + enemyAttack);   
+    
+    checkProgress();
+    
+}
+
+function checkProgress() {
+    if (playerHealth <= 0 && enemyHealth > 0){
+        loose();        
+    }else if (enemyHealth <= 0 && playerHealth > 0){
+        nextEnemy();
+    }else if (enemyHealth <= 0 && playerHealth <= 0){
+        draw();
+    }
+    
+}
+
+function nextEnemy(){
+    if (characters.length !== 0){
+        //remove enemy from playerselect div
+        document.getElementById(enemyId).remove();
+
+        //remove stats from attackinfo
+        $("#enemyStats").html("");
+        
+        $("#playerContainer h3").html("You have defeated " + enemy[0][0] + " . <br/> Select a new enemy to fight.");
+        $("#playerContainer h3").css("top", "-60px");
+        $("#buttons").css("top", "300px");
+        $("#enemyContainer").css("top", "380px");  
+        $("#Attack").toggleClass("invisible");
+    }
+}
+
+function loose(){
+    //remove enemy from playerselect div
+        document.getElementById(playerId).remove();
+        document.getElementById(enemyId).remove();
+        
+        //remove stats from attackinfo
+        $("#playerStats").html("");
+        $("#enemyStats").html("");
+    
+        $("#playerContainer h3").html(enemy[0][0] + " has defeated you. <br/> Press 'Restart' to play again.");
+        $("#buttons").css("top", "300px");
+}
+
+function draw() {
+    document.getElementById(playerId).remove();
+    document.getElementById(enemyId).remove();
+        
+        
+        //remove stats from attackinfo
+        $("#playerStats").html("");
+        $("#enemyStats").html("");
+    
+        $("#playerContainer h3").html("DRAW: CLICK RESTART");
     
 }
 
@@ -48,7 +117,7 @@ function displayPlayer() {
     myDiv = $("<div>");
     image = $("<img>");
     paragraph = $("<p>");
-    myDiv.attr("id", playerId);
+    myDiv.attr("id", "player");
     myDiv.addClass("player");
     
     image.attr("src", player[0][3]);
@@ -56,7 +125,7 @@ function displayPlayer() {
     
     myDiv.append(image);
     myDiv.append(paragraph);
-    $("#playerSelect").append(myDiv); 
+    $("#playerSelect").append(myDiv);
 }
 
 function displayDefender() {
@@ -80,7 +149,7 @@ function displayDefender() {
     $("#playerContainer").css("height", "150px");
     $("#playerSelect").css("top", "-55px");
     $(".enemies").css("margin-left", "70px");
-    $("#enemyContainer").css("top", "290px");
+    $("#enemyContainer").css("top", "320px");
     $("#buttons").css("top", "270px");
     $("#buttons #Attack").toggleClass("invisible");
     $(".attackInfo").css("top", "0px");
@@ -106,7 +175,28 @@ function enemyHP() {
     myDiv.attr("id", "enemyHP");
     location.append(myDiv);
 }
-   
+
+ var selectEnemy = $(".enemies").on("click", function(){
+    enemyId = ($(this).attr("id"));
+    enemyNum = parseInt(enemyId[9]);
+    enemy.push(characters[enemyNum]);
+    characters.splice(enemyNum, 1);
+
+    displayCharacters("#enemies", characters, "enemies");
+
+    displayDefender();
+
+
+    playerHealth = player[0][1];
+    playerAttack = player[0][2];
+    playerUpAttack = player[0][2];
+
+    enemyHealth = enemy[0][1];    
+    enemyAttack = enemy[0][2];
+        
+        
+ });
+  
 
 
 $(document).ready(function(){
@@ -116,11 +206,8 @@ $(document).ready(function(){
 $(".characters").on("click", function(){
     playerId = ($(this).attr("id"));
     playerNum = parseInt(playerId[9]);
-    console.log(playerId + " " + playerNum);
     player.push(characters[playerNum]);
-    console.log(player);
     characters.splice(playerNum, 1);
-    console.log(characters);
     
     //displayCharacters("#playerSelect", player);
     
@@ -130,19 +217,7 @@ $(".characters").on("click", function(){
     playerHP();
     $("#playerContainer h3").html("Player");    
     
-    $(".enemies").on("click", function(){
-        enemyId = ($(this).attr("id"));
-        enemyNum = parseInt(enemyId[9]);
-        console.log(enemyId + " " + enemyNum); 
-        enemy.push(characters[enemyNum]);
-        console.log(enemy);
-        characters.splice(enemyNum, 1);
-        console.log(characters);
-        
-        displayCharacters("#enemies", characters, "enemies");
-        
-        displayDefender();
-    });
+   
     
 });
     
