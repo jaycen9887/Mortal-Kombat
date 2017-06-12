@@ -52,6 +52,8 @@ button:active {
     position: relative;
     top: 50px;
     text-align: center;
+    width: 200px;
+    margin: auto;
 }
 
 img {
@@ -106,9 +108,6 @@ img {
     height: 400px;
 }
 
-#fightContainer h3 {
-    font-size: 60px;
-}
 
 #fight {
     width: 560px;
@@ -166,7 +165,7 @@ img {
 #Reset {
     position: absolute;
     top: 160px;
-    left: 465px;
+    left: 0px;
     
 }
 

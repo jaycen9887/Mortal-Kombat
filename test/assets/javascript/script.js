@@ -33,6 +33,7 @@ var enemyHpBar;
 
 var themeSong;
 var fight;
+var winner;
 
 /******************* FUNCTIONS **********************/
 
@@ -109,10 +110,10 @@ function nextEnemy(){
         $("#fightContainer").toggleClass("invisible");
         $("#enemyContainer").toggleClass("invisible");
         
-        if (characters.length === 2){
+        if (enemyCount === 1){
             $("#enemies").css({"width": "360px", "margin": "auto"});
-        }else if (characters.length === 1){
-           $("#enemies").css({"width": "185px", "margin": "auto"}); 
+        }else if (enemyCount === 2){
+           $("#enemies").css({"width": "185px", "margin": "auto", "position": "absolute", "left": "475px"}); 
         }
         
     }else {
@@ -123,6 +124,9 @@ function nextEnemy(){
         
         $("#playerOne").css({"width": "185px", "margin": "auto", "position": "absolute", "left": "475px"});
         document.getElementById("ehp").remove();
+        document.getElementById("php").remove();
+        themeSong.pause();
+        winner.play();
     }
 }
 
@@ -130,6 +134,9 @@ function loose(){
     //remove enemy from playerselect div
     document.getElementById(playerId).remove();
     document.getElementById(enemyId).remove();
+    
+    document.getElementById("php").remove();
+    document.getElementById("ehp").remove();
 
     //remove stats from attackinfo
     $("#playerStats").html("");
@@ -141,7 +148,7 @@ function loose(){
     
     $("#Attack").toggleClass("invisible");
     
-    $("#Reset").css({"position": "absolute" , "top": "-90px"});
+    $("#Reset").css({"position": "absolute" , "top": "-90px", "left": "0px"});
     
     $(".fighter").css({"position": "absolute", "left": "480px"});
 }
@@ -248,7 +255,17 @@ $(document).ready(function(){
         playerId = ("playerOne");
         player.push(characters[playerNum]);
         characters.splice(playerNum, 1);
-
+        
+        if(player[0][0] === "SCORPION") {
+            winner = new Audio("assets/sounds/ScorpionWins.mp3");
+        } else if(player[0][0] === "SHEEVA"){
+            winner = new Audio("assets/sounds/SheevaWins.mp3");
+        } else if(player[0][0] === "SONYA"){
+            winner = new Audio("assets/sounds/SonyaWins.mp3");
+        }else if(player[0][0] === "SUB ZERO"){
+            winner = new Audio("assets/sounds/SubZeroWins.mp3");
+        }
+        
         $("#playerContainer").toggleClass("invisible");
         $("#enemyContainer").toggleClass("invisible");
         displayCharacters("#enemies", characters, "defenders");
@@ -274,7 +291,6 @@ $(document).ready(function(){
             
             $("#enemyContainer").toggleClass("invisible");
             $("#fightContainer").toggleClass("invisible");
-
             displayEnemy();
 
             playerHealth = player[0][1];
