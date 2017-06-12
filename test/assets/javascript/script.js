@@ -151,17 +151,40 @@ function loose(){
     $("#Reset").css({"position": "absolute" , "top": "-90px", "left": "0px"});
     
     $(".fighter").css({"position": "absolute", "left": "480px"});
+    
+    if(enemy[0][0] === "SCORPION") {
+            winner = new Audio("assets/sounds/ScorpionWins.mp3");
+        } else if(enemy[0][0] === "SHEEVA"){
+            winner = new Audio("assets/sounds/SheevaWins.mp3");
+        } else if(enemy[0][0] === "SONYA"){
+            winner = new Audio("assets/sounds/SonyaWins.mp3");
+        }else if(enemy[0][0] === "SUB ZERO"){
+            winner = new Audio("assets/sounds/SubZeroWins.mp3");
+        }
+    
+        themeSong.pause();
+        winner.play();
+    
+    
 }
 
 function draw() {
     document.getElementById(playerId).remove();
     document.getElementById(enemyId).remove();
+    document.getElementById(enemyId).remove();
         
         //remove stats from attackinfo
+    document.getElementById("php").remove();
+    document.getElementById("ehp").remove();
+    
         $("#playerStats").html("");
         $("#enemyStats").html("");
     
-        $("#playerContainer h3").html("DRAW: CLICK RESTART");
+        $("#fightContainer h3").html("IT'S A DRAW </br> CLICK RESET TO TRY AGAIN!");
+    
+        $("#fightContainer h3").css({"position": "absolute", "top": "230px", "left": "345px"})
+    
+    $("#Attack").toggleClass("invisible");
     
 }
 
