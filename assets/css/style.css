@@ -10,7 +10,6 @@ h1 {
     height: 100px;
     padding-top: 30px;
     margin-bottom: 50px;
-    border-bottom: 2px dashed;
 }
 
 h3{
@@ -24,7 +23,6 @@ h3{
 }
 
 .container {
-    border: 2px dashed;
     height: 600px;
 }
 
