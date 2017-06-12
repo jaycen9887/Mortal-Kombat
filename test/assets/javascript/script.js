@@ -5,10 +5,11 @@ var player = [];
 
 var enemy = [];
 
-var attack;
+var enemyCount = 0;
+
+/*var attack;*/
 var playerId;
 var playerNum;
-var playerName;
 var enemyId;
 var enemyNum;
 var enemyName;
@@ -84,20 +85,17 @@ function calcHp(){
 
 function checkProgress() {
     if (playerHealth <= 0 && enemyHealth > 0){
-        console.log("Lose");
         loose();        
     }else if (enemyHealth <= 0 && playerHealth > 0){
-        console.log("Next");
         nextEnemy();
     }else if (enemyHealth <= 0 && playerHealth <= 0){
-        console.log("Draw");
         draw();
     }
     
 }
 
 function nextEnemy(){
-    if (characters.length > 0){
+    if (enemyCount < 3){
         //remove enemy from playerselect div
         document.getElementById(enemyId).remove();
         document.getElementById(enemyId).remove();
@@ -114,8 +112,17 @@ function nextEnemy(){
         if (characters.length === 2){
             $("#enemies").css({"width": "360px", "margin": "auto"});
         }else if (characters.length === 1){
-           $("#enemies").css({"width": "230px", "margin": "auto"}); 
+           $("#enemies").css({"width": "185px", "margin": "auto"}); 
         }
+        
+    }else {
+        $("#fightContainer h3").html(player[0][0] + " WINS!!");
+        document.getElementById(enemyId).remove();
+        document.getElementById(enemyId).remove();
+        $("#Attack").toggleClass("invisible");
+        
+        $("#playerOne").css({"width": "185px", "margin": "auto", "position": "absolute", "left": "475px"});
+        document.getElementById("ehp").remove();
     }
 }
 
@@ -128,14 +135,20 @@ function loose(){
     $("#playerStats").html("");
     $("#enemyStats").html("");
 
-    $("#playerContainer h3").html(enemy[0][0] + " has defeated you. <br/> Press 'Restart' to play again.");
+    $("#fightContainer h3").html(enemyName + " HAS DEFEATED YOU!.");
+    
     $("#buttons").css("top", "300px");
+    
+    $("#Attack").toggleClass("invisible");
+    
+    $("#Reset").css({"position": "absolute" , "top": "-90px"});
+    
+    $(".fighter").css({"position": "absolute", "left": "480px"});
 }
 
 function draw() {
     document.getElementById(playerId).remove();
     document.getElementById(enemyId).remove();
-        
         
         //remove stats from attackinfo
         $("#playerStats").html("");
@@ -167,8 +180,6 @@ function displayCharacters(location , arr, className) {
     }
 }
 
-
-
 function displayPlayer() {
    myDiv = $("<div>");
     image = $("<img>");
@@ -181,6 +192,7 @@ function displayPlayer() {
     $("#fight").append(myDiv);
     playerHP();
     $("#playerHP").css("width", playerHpBar); 
+    playerAttack = player[0][2];
 }
 
 function playerHP() {
@@ -195,23 +207,6 @@ function playerHP() {
     $("#stats").append(myDiv);
 }
 
-/*function enemyHP() {
-    if(document.getElementById("stats").contains(document.getElementById("ehp"))){
-        document.getElementById("ehp").remove();
-       };
-    
-    myDiv = $("<div>");
-    paragraph = $("<p>");
-    var hpDiv = $("<div>");
-    myDiv.attr("id", "ehp");
-    hpDiv.attr("id", "enemyHP");
-    paragraph.text(enemyHealth);
-    hpDiv.append(paragraph);
-    myDiv.append(hpDiv);
-    $("#stats").append(myDiv);
-}*/
-
-
   function displayEnemy() {
     myDiv = $("<div>");
     image = $("<img>");
@@ -224,9 +219,7 @@ function playerHP() {
     $("#fight").append(myDiv);
     
     $("#Attack").toggleClass("invisible");
-    
-      
-    if(document.getElementById("stats").contains(document.getElementById("ehp"))){
+     if(document.getElementById("stats").contains(document.getElementById("ehp"))){
         document.getElementById("ehp").remove();
     };
     myDiv = $("<div>");
@@ -240,7 +233,6 @@ function playerHP() {
     $("#stats").append(myDiv);
     themeSong.volume = .2;
 }
-
 
 $(document).ready(function(){
     
@@ -257,15 +249,14 @@ $(document).ready(function(){
         player.push(characters[playerNum]);
         characters.splice(playerNum, 1);
 
-
         $("#playerContainer").toggleClass("invisible");
         $("#enemyContainer").toggleClass("invisible");
         displayCharacters("#enemies", characters, "defenders");
         
         displayPlayer();
    
-    
         $(".defenders").on("click", function(){
+            enemyCount++;
             enemyId = ($(this).attr("id"));
             
             enemyName = ($(this).attr("name"));
@@ -278,35 +269,15 @@ $(document).ready(function(){
                 }
             }
                 
-            console.log(enemyName + " " + index);
-            
-            /*var mydude = document.getElementById(enemyId);
-            var enemyImage = mydude.getElementsByTagName("img")[0];
-            var images = enemyImage.src;
-            var newImages = images.slice(28, images.length);
-            var index = characters.indexOf(newImages);
-            console.log(characters);
-            
-            console.log(index);
-            
-            console.log(newImages);
-            */
-            
             enemyNum = parseInt(enemyId[9]);
             enemy.push(characters[enemyNum]);
-            /*characters.splice(enemyNum, 1);*/
-
+            
             $("#enemyContainer").toggleClass("invisible");
             $("#fightContainer").toggleClass("invisible");
-
-            /*displayCharacters("#enemies", characters, "enemies");
-
-            displayDefender();*/
 
             displayEnemy();
 
             playerHealth = player[0][1];
-            playerAttack = player[0][2];
             playerUpAttack = player[0][2];
 
             enemyHealth = enemy[0][1];    
@@ -319,9 +290,6 @@ $(document).ready(function(){
             }else {
                 $("#enemyHP").text(enemyHealth);
             }
-
         });
-    
-    }); 
-    
+    });  
 });
