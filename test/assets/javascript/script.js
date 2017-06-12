@@ -1,3 +1,4 @@
+/****************************** VARIABLES ****************************/
 var characters = [["SCORPION", 120, 8, "assets/images/Scorpion.png"], ["SHEEVA", 100, 5, "assets/images/Sheeva.png"], ["SONYA", 150, 20, "assets/images/Sonya.png"], ["SUB ZERO", 180, 25, "assets/images/SubZero.png"]];
 
 var player = [];
@@ -7,8 +8,10 @@ var enemy = [];
 var attack;
 var playerId;
 var playerNum;
+var playerName;
 var enemyId;
 var enemyNum;
+var enemyName;
 var myDiv;
 var image;
 var paragraph;
@@ -40,10 +43,6 @@ function attacking() {
     fight = new Audio("assets/sounds/fight.mp3");
     fight.play();
     calcHp();
-    
-    
-   /* $("#playerStats").html(player[0][0] + " <br/>" + "Health: " + playerHealth + " <br/>" + "Attack: " + playerAttack);
-    $("#enemyStats").html(enemy[0][0] + " <br/>" + "Health: " + enemyHealth + " <br/>" + "Attack: " + enemyAttack);  */ 
     
     checkProgress();
     
@@ -122,15 +121,15 @@ function nextEnemy(){
 
 function loose(){
     //remove enemy from playerselect div
-        document.getElementById(playerId).remove();
-        document.getElementById(enemyId).remove();
-        
-        //remove stats from attackinfo
-        $("#playerStats").html("");
-        $("#enemyStats").html("");
-    
-        $("#playerContainer h3").html(enemy[0][0] + " has defeated you. <br/> Press 'Restart' to play again.");
-        $("#buttons").css("top", "300px");
+    document.getElementById(playerId).remove();
+    document.getElementById(enemyId).remove();
+
+    //remove stats from attackinfo
+    $("#playerStats").html("");
+    $("#enemyStats").html("");
+
+    $("#playerContainer h3").html(enemy[0][0] + " has defeated you. <br/> Press 'Restart' to play again.");
+    $("#buttons").css("top", "300px");
 }
 
 function draw() {
@@ -156,6 +155,7 @@ function displayCharacters(location , arr, className) {
         image = $("<img>");
         /*paragraph = $("<p>");*/
         myDiv.attr("id", "character"+i);
+        myDiv.attr("name", characters[i][0]);
         myDiv.addClass(className);
 
         image.attr("src", arr[i][3]);
@@ -167,22 +167,7 @@ function displayCharacters(location , arr, className) {
     }
 }
 
-function displayEnemy() {
-    myDiv = $("<div>");
-    image = $("<img>");
-    myDiv.attr("id", enemyId);
-    myDiv.addClass("fighter");
-    
-    image.attr("src", enemy[0][3]);
-    
-    myDiv.append(image);
-    $("#fight").append(myDiv);
-    
-    $("#Attack").toggleClass("invisible");
-    
-    enemyHP();
-    themeSong.volume = .2;
-}
+
 
 function displayPlayer() {
    myDiv = $("<div>");
@@ -198,39 +183,6 @@ function displayPlayer() {
     $("#playerHP").css("width", playerHpBar); 
 }
 
-/*
-function displayFighers() {
-    myDiv = $("<div>");
-    image = $("<img>");
-    myDiv.attr("id", "playerOne");
-    myDiv.addClass("fighter");
-    
-    image.attr("src", player[0][3]);
-    
-    myDiv.append(image);
-    $("#fight").append(myDiv);
-    
-    myDiv = $("<div>");
-    image = $("<img>");
-    myDiv.attr("id", enemyId);
-    myDiv.addClass("fighter");
-    
-    image.attr("src", enemy[0][3]);
-    
-    myDiv.append(image);
-    $("#fight").append(myDiv);
-    
-    $("#Attack").toggleClass("invisible");
-    
-    playerHP();
-    enemyHP();
-    
-    $("#playerHP").css("width", playerHpBar);
-    
-    
-}*/
-
-
 function playerHP() {
     myDiv = $("<div>");
     paragraph = $("<p>");
@@ -243,7 +195,11 @@ function playerHP() {
     $("#stats").append(myDiv);
 }
 
-function enemyHP() {
+/*function enemyHP() {
+    if(document.getElementById("stats").contains(document.getElementById("ehp"))){
+        document.getElementById("ehp").remove();
+       };
+    
     myDiv = $("<div>");
     paragraph = $("<p>");
     var hpDiv = $("<div>");
@@ -253,10 +209,37 @@ function enemyHP() {
     hpDiv.append(paragraph);
     myDiv.append(hpDiv);
     $("#stats").append(myDiv);
+}*/
+
+
+  function displayEnemy() {
+    myDiv = $("<div>");
+    image = $("<img>");
+    myDiv.attr("id", enemyId);
+    myDiv.addClass("fighter");
+    
+    image.attr("src", enemy[0][3]);
+    
+    myDiv.append(image);
+    $("#fight").append(myDiv);
+    
+    $("#Attack").toggleClass("invisible");
+    
+      
+    if(document.getElementById("stats").contains(document.getElementById("ehp"))){
+        document.getElementById("ehp").remove();
+    };
+    myDiv = $("<div>");
+    paragraph = $("<p>");
+    var hpDiv = $("<div>");
+    myDiv.attr("id", "ehp");
+    hpDiv.attr("id", "enemyHP");
+    paragraph.text(enemyHealth);
+    hpDiv.append(paragraph);
+    myDiv.append(hpDiv);
+    $("#stats").append(myDiv);
+    themeSong.volume = .2;
 }
-
-
-  
 
 
 $(document).ready(function(){
@@ -270,6 +253,7 @@ $(document).ready(function(){
     $(".characters").on("click", function(){
         playerId = ($(this).attr("id"));
         playerNum = parseInt(playerId[9]);
+        playerId = ("playerOne");
         player.push(characters[playerNum]);
         characters.splice(playerNum, 1);
 
@@ -284,7 +268,19 @@ $(document).ready(function(){
         $(".defenders").on("click", function(){
             enemyId = ($(this).attr("id"));
             
-            var mydude = document.getElementById(enemyId);
+            enemyName = ($(this).attr("name"));
+            
+            var index;
+            
+            for (var i = 0; i < characters.length; i++){
+                if(characters[i][0] === enemyName){
+                    index = i;
+                }
+            }
+                
+            console.log(enemyName + " " + index);
+            
+            /*var mydude = document.getElementById(enemyId);
             var enemyImage = mydude.getElementsByTagName("img")[0];
             var images = enemyImage.src;
             var newImages = images.slice(28, images.length);
@@ -294,11 +290,11 @@ $(document).ready(function(){
             console.log(index);
             
             console.log(newImages);
-            
+            */
             
             enemyNum = parseInt(enemyId[9]);
             enemy.push(characters[enemyNum]);
-            characters.splice(enemyNum, 1);
+            /*characters.splice(enemyNum, 1);*/
 
             $("#enemyContainer").toggleClass("invisible");
             $("#fightContainer").toggleClass("invisible");
