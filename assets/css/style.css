@@ -10,7 +10,10 @@ h1 {
     height: 100px;
     padding-top: 30px;
     margin-bottom: 50px;
+<<<<<<< HEAD
    /* border-bottom: 2px dashed;*/
+=======
+>>>>>>> bcf3a8c04ce209ef933186feda0b0e9a9281f008
 }
 
 h3{
@@ -24,7 +27,10 @@ h3{
 }
 
 .container {
+<<<<<<< HEAD
    /* border: 2px dashed;*/
+=======
+>>>>>>> bcf3a8c04ce209ef933186feda0b0e9a9281f008
     height: 600px;
 }
 
