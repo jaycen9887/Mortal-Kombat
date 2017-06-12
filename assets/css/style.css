@@ -1,7 +1,7 @@
 body {
     font-family: 'Mogra', cursive;
     color: white;
-    background-image: url(/test/assets/images/cloud.jpg);
+    background-image: url(../images/cloud.jpg);
 }
 
 h1 {
@@ -10,7 +10,7 @@ h1 {
     height: 100px;
     padding-top: 30px;
     margin-bottom: 50px;
-    border-bottom: 2px dashed;
+   /* border-bottom: 2px dashed;*/
 }
 
 h3{
@@ -24,7 +24,7 @@ h3{
 }
 
 .container {
-    border: 2px dashed;
+   /* border: 2px dashed;*/
     height: 600px;
 }
 
