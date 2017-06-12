@@ -1,7 +1,7 @@
 body {
     font-family: 'Mogra', cursive;
     color: white;
-    background-image: url(assets/images/cloud.jpg);
+    background-image: url(../images/cloud.jpg);
 }
 
 h1 {
