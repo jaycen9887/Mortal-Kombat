@@ -1,14 +1,18 @@
+/****************************** VARIABLES ****************************/
 var characters = [["SCORPION", 120, 8, "assets/images/Scorpion.png"], ["SHEEVA", 100, 5, "assets/images/Sheeva.png"], ["SONYA", 150, 20, "assets/images/Sonya.png"], ["SUB ZERO", 180, 25, "assets/images/SubZero.png"]];
 
 var player = [];
 
 var enemy = [];
 
-var attack;
+var enemyCount = 0;
+
+/*var attack;*/
 var playerId;
 var playerNum;
 var enemyId;
 var enemyNum;
+var enemyName;
 var myDiv;
 var image;
 var paragraph;
@@ -21,21 +25,62 @@ var playerUpAttack;
 var enemyHealth;    
 var enemyAttack;
 
+
+var playerHP;
+var enemyHP;
+var playerHpBar;
+var enemyHpBar;
+
+var themeSong;
+var fight;
+var winner;
+
 /******************* FUNCTIONS **********************/
 
 function restart() {
     location.reload();
 }
 
-function attacking() {    
+function attacking() { 
+    fight = new Audio("assets/sounds/fight.mp3");
+    fight.play();
+    calcHp();
+    
+    checkProgress();
+    
+}
+
+function calcHp(){
+    $("#playerHP").css("width", playerHpBar);
+    playerHP = 100/(playerHealth/enemyAttack);
+    enemyHP = 100/(enemyHealth/playerAttack);
+    playerHpBar = document.getElementById("playerHP").offsetWidth;
+    enemyHpBar = document.getElementById("enemyHP").offsetWidth;;
+    
+    playerHpBar -= playerHP;
+    enemyHpBar -= enemyHP;
+    
     playerHealth -= enemyAttack;
     enemyHealth -= playerAttack;
     playerAttack += player[0][2];
     
-    $("#playerStats").html(player[0][0] + " <br/>" + "Health: " + playerHealth + " <br/>" + "Attack: " + playerAttack);
-    $("#enemyStats").html(enemy[0][0] + " <br/>" + "Health: " + enemyHealth + " <br/>" + "Attack: " + enemyAttack);   
+    //hp width = playerhpbar
+    $("#playerHP").css("width", playerHpBar + "px");
+    $("#enemyHP").css("width", enemyHpBar + "px");
     
-    checkProgress();
+    if (playerHealth <= (player[0][1] / 2)){
+        $("#playerHP").css("background-color", "#730000");
+    }else if (enemyHealth <= (enemy[0][1] / 2)){
+        $("#enemyHP").css("background-color", "#730000");
+    }
+    
+    $("#playerHP").text(playerHealth);
+    if(enemyHealth < 0) {
+        enemyHealth = 0;
+        $("#enemyHP").text("");
+    }else {
+        $("#enemyHP").text(enemyHealth);
+    }
     
 }
 
@@ -51,177 +96,239 @@ function checkProgress() {
 }
 
 function nextEnemy(){
-    if (characters.length !== 0){
+    if (enemyCount < 3){
         //remove enemy from playerselect div
         document.getElementById(enemyId).remove();
-
+        document.getElementById(enemyId).remove();
+        
+        enemy = [];
+        
         //remove stats from attackinfo
         $("#enemyStats").html("");
-        
-        $("#playerContainer h3").html("You have defeated " + enemy[0][0] + " . <br/> Select a new enemy to fight.");
-        $("#playerContainer h3").css("top", "-60px");
-        $("#buttons").css("top", "300px");
-        $("#enemyContainer").css("top", "380px");  
+         
         $("#Attack").toggleClass("invisible");
+        $("#fightContainer").toggleClass("invisible");
+        $("#enemyContainer").toggleClass("invisible");
+        
+        if (enemyCount === 1){
+            $("#enemies").css({"width": "360px", "margin": "auto"});
+        }else if (enemyCount === 2){
+           $("#enemies").css({"width": "185px", "margin": "auto", "position": "absolute", "left": "475px"}); 
+        }
+        
+    }else {
+        $("#fightContainer h3").html(player[0][0] + " WINS!!");
+        document.getElementById(enemyId).remove();
+        document.getElementById(enemyId).remove();
+        $("#Attack").toggleClass("invisible");
+        
+        $("#playerOne").css({"width": "185px", "margin": "auto", "position": "absolute", "left": "475px"});
+        document.getElementById("ehp").remove();
+        document.getElementById("php").remove();
+        themeSong.pause();
+        winner.play();
     }
 }
 
 function loose(){
     //remove enemy from playerselect div
-        document.getElementById(playerId).remove();
-        document.getElementById(enemyId).remove();
-        
-        //remove stats from attackinfo
-        $("#playerStats").html("");
-        $("#enemyStats").html("");
+    document.getElementById(playerId).remove();
+    document.getElementById(enemyId).remove();
     
-        $("#playerContainer h3").html(enemy[0][0] + " has defeated you. <br/> Press 'Restart' to play again.");
-        $("#buttons").css("top", "300px");
+    document.getElementById("php").remove();
+    document.getElementById("ehp").remove();
+
+    //remove stats from attackinfo
+    $("#playerStats").html("");
+    $("#enemyStats").html("");
+
+    $("#fightContainer h3").html(enemyName + " HAS DEFEATED YOU!.");
+    
+    $("#buttons").css("top", "300px");
+    
+    $("#Attack").toggleClass("invisible");
+    
+    $("#Reset").css({"position": "absolute" , "top": "-90px", "left": "0px"});
+    
+    $(".fighter").css({"position": "absolute", "left": "480px"});
+    
+    if(enemy[0][0] === "SCORPION") {
+            winner = new Audio("assets/sounds/ScorpionWins.mp3");
+        } else if(enemy[0][0] === "SHEEVA"){
+            winner = new Audio("assets/sounds/SheevaWins.mp3");
+        } else if(enemy[0][0] === "SONYA"){
+            winner = new Audio("assets/sounds/SonyaWins.mp3");
+        }else if(enemy[0][0] === "SUB ZERO"){
+            winner = new Audio("assets/sounds/SubZeroWins.mp3");
+        }
+    
+        themeSong.pause();
+        winner.play();
+    
+    
 }
 
 function draw() {
     document.getElementById(playerId).remove();
     document.getElementById(enemyId).remove();
-        
+    document.getElementById(enemyId).remove();
         
         //remove stats from attackinfo
+    document.getElementById("php").remove();
+    document.getElementById("ehp").remove();
+    
         $("#playerStats").html("");
         $("#enemyStats").html("");
     
-        $("#playerContainer h3").html("DRAW: CLICK RESTART");
+        $("#fightContainer h3").html("IT'S A DRAW </br> CLICK RESET TO TRY AGAIN!");
+    
+        $("#fightContainer h3").css({"position": "absolute", "top": "230px", "left": "345px"})
+    
+    $("#Attack").toggleClass("invisible");
     
 }
 
 //Function takes these characters and displays their images on screen.
 function displayCharacters(location , arr, className) {
     $(".characters").remove();
-    $(".enemies").remove();
+    $(".defenders").remove();
     
     for (var i = 0; i < characters.length; i++) {
         myDiv = $("<div>");
         image = $("<img>");
-        paragraph = $("<p>");
+        /*paragraph = $("<p>");*/
         myDiv.attr("id", "character"+i);
+        myDiv.attr("name", characters[i][0]);
         myDiv.addClass(className);
 
         image.attr("src", arr[i][3]);
-        paragraph.text(arr[i][0]);
+        /*paragraph.text(arr[i][0]);*/
 
         myDiv.append(image);
-        myDiv.append(paragraph);
+        /*myDiv.append(paragraph);*/
         $(location).append(myDiv);
     }
 }
 
 function displayPlayer() {
-    myDiv = $("<div>");
+   myDiv = $("<div>");
     image = $("<img>");
-    paragraph = $("<p>");
-    myDiv.attr("id", "player");
-    myDiv.addClass("player");
+    myDiv.attr("id", "playerOne");
+    myDiv.addClass("fighter");
     
     image.attr("src", player[0][3]);
-    paragraph.text(player[0][0]);
     
     myDiv.append(image);
-    myDiv.append(paragraph);
-    $("#playerSelect").append(myDiv);
-}
-
-function displayDefender() {
-    myDiv = $("<div>");
-    image = $("<img>");
-    paragraph = $("<p>");
-    myDiv.attr("id", enemyId);
-    myDiv.addClass("defender");
-    
-    image.attr("src", enemy[0][3]);
-    paragraph.text(enemy[0][0]);
-    
-    myDiv.append(image);
-    myDiv.append(paragraph);
-    $("#playerSelect").append(myDiv);
-    
-    $(".player").css("margin-left", "70px");
-    
-    $("#playerContainer h3").html("VS");
-    $("#playerContainer h3").css({"position": "relative", "top": "55px"});
-    $("#playerContainer").css("height", "150px");
-    $("#playerSelect").css("top", "-55px");
-    $(".enemies").css("margin-left", "70px");
-    $("#enemyContainer").css("top", "320px");
-    $("#buttons").css("top", "270px");
-    $("#buttons #Attack").toggleClass("invisible");
-    $(".attackInfo").css("top", "0px");
-    
-    enemyHP();
+    $("#fight").append(myDiv);
+    playerHP();
+    $("#playerHP").css("width", playerHpBar); 
+    playerAttack = player[0][2];
 }
 
 function playerHP() {
     myDiv = $("<div>");
     paragraph = $("<p>");
-    paragraph.text("HP " + player[0][1]);
-    myDiv.append(paragraph);
-    myDiv.attr("id", "playerHP");
-    $("#playerSelect").append(myDiv);
+    var hpDiv = $("<div>");
+    myDiv.attr("id", "php");
+    hpDiv.attr("id", "playerHP");
+    paragraph.text(playerHealth);
+    hpDiv.append(paragraph);
+    myDiv.append(hpDiv);
+    $("#stats").append(myDiv);
 }
 
-function enemyHP() {
-    var location = $("#"+ enemyId);
+  function displayEnemy() {
+    myDiv = $("<div>");
+    image = $("<img>");
+    myDiv.attr("id", enemyId);
+    myDiv.addClass("fighter");
+    
+    image.attr("src", enemy[0][3]);
+    
+    myDiv.append(image);
+    $("#fight").append(myDiv);
+    
+    $("#Attack").toggleClass("invisible");
+     if(document.getElementById("stats").contains(document.getElementById("ehp"))){
+        document.getElementById("ehp").remove();
+    };
     myDiv = $("<div>");
     paragraph = $("<p>");
-    paragraph.text("HP " + enemy[0][1]);
-    myDiv.append(paragraph);
-    myDiv.attr("id", "enemyHP");
-    location.append(myDiv);
+    var hpDiv = $("<div>");
+    myDiv.attr("id", "ehp");
+    hpDiv.attr("id", "enemyHP");
+    paragraph.text(enemyHealth);
+    hpDiv.append(paragraph);
+    myDiv.append(hpDiv);
+    $("#stats").append(myDiv);
+    themeSong.volume = .2;
 }
 
- var selectEnemy = $(".enemies").on("click", function(){
-    enemyId = ($(this).attr("id"));
-    enemyNum = parseInt(enemyId[9]);
-    enemy.push(characters[enemyNum]);
-    characters.splice(enemyNum, 1);
-
-    displayCharacters("#enemies", characters, "enemies");
-
-    displayDefender();
-
-
-    playerHealth = player[0][1];
-    playerAttack = player[0][2];
-    playerUpAttack = player[0][2];
-
-    enemyHealth = enemy[0][1];    
-    enemyAttack = enemy[0][2];
-        
-        
- });
-  
-
-
 $(document).ready(function(){
+    
+    themeSong = new Audio("assets/sounds/Mortal_Kombat_Theme.mp3");
+    themeSong.play();
 
     displayCharacters("#playerSelect", characters, "characters");
+    
 //Function for onclick selecting players character moving character to player div
-$(".characters").on("click", function(){
-    playerId = ($(this).attr("id"));
-    playerNum = parseInt(playerId[9]);
-    player.push(characters[playerNum]);
-    characters.splice(playerNum, 1);
-    
-    //displayCharacters("#playerSelect", player);
-    
-    displayCharacters("#enemies", characters, "enemies");
-    
-    displayPlayer();
-    playerHP();
-    $("#playerContainer h3").html("Player");    
-    
+    $(".characters").on("click", function(){
+        playerId = ($(this).attr("id"));
+        playerNum = parseInt(playerId[9]);
+        playerId = ("playerOne");
+        player.push(characters[playerNum]);
+        characters.splice(playerNum, 1);
+        
+        if(player[0][0] === "SCORPION") {
+            winner = new Audio("assets/sounds/ScorpionWins.mp3");
+        } else if(player[0][0] === "SHEEVA"){
+            winner = new Audio("assets/sounds/SheevaWins.mp3");
+        } else if(player[0][0] === "SONYA"){
+            winner = new Audio("assets/sounds/SonyaWins.mp3");
+        }else if(player[0][0] === "SUB ZERO"){
+            winner = new Audio("assets/sounds/SubZeroWins.mp3");
+        }
+        
+        $("#playerContainer").toggleClass("invisible");
+        $("#enemyContainer").toggleClass("invisible");
+        displayCharacters("#enemies", characters, "defenders");
+        
+        displayPlayer();
    
-    
-});
-    
-    
-    
-    
+        $(".defenders").on("click", function(){
+            enemyCount++;
+            enemyId = ($(this).attr("id"));
+            
+            enemyName = ($(this).attr("name"));
+            
+            var index;
+            
+            for (var i = 0; i < characters.length; i++){
+                if(characters[i][0] === enemyName){
+                    index = i;
+                }
+            }
+                
+            enemyNum = parseInt(enemyId[9]);
+            enemy.push(characters[enemyNum]);
+            
+            $("#enemyContainer").toggleClass("invisible");
+            $("#fightContainer").toggleClass("invisible");
+            displayEnemy();
+
+            playerHealth = player[0][1];
+            playerUpAttack = player[0][2];
+
+            enemyHealth = enemy[0][1];    
+            enemyAttack = enemy[0][2];
+
+            $("#playerHP").text(playerHealth);
+            if(enemyHealth < 0) {
+                enemyHealth = 0;
+                $("#enemyHP").text("");
+            }else {
+                $("#enemyHP").text(enemyHealth);
+            }
+        });
+    });  
 });
